@@ -2,7 +2,7 @@ require 'CSV'
 require 'fileutils'
 
 
-def scrub_csv(cols=[], csv_files=[])
+def scrub_csv(, csv_files=[])
   # csv = CSV.read(csv_file, headers:true)
   # csv_new = CSV.open("new.csv","wb+")
 
