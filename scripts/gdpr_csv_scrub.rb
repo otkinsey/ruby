@@ -1,15 +1,52 @@
+# TABLES AND FIELDS TO SCRUB
+# ---------------------------------------------
+
+# Tables to Sanitize:
+# - spree_addresses
+#   - firstname
+#   - lastname
+#   - address
+#   - city
+#   - zipcode
+#   - phone
+#
+# - spree_credit_cards
+#   - last_digits
+#   - name
+#
+# - spree_e_gifts
+#   - sender
+#   - recipient
+#   - email
+#
+# - spree_orders
+#   - emails
+#
+# - spree_subscribers
+#   - email
+#   - first_name
+#   - last_name
+#
+# - spree_users
+#   - email
+#   - login
+#   - first_name
+#   - last_name
 require 'CSV'
 require 'fileutils'
 
 
 def scrub_csv(cols=[], csv_file)
   csv = CSV.read(csv_file, headers:true)
-  csv_new = CSV.open("new.csv","wb+")
+  new_title = csv_file[0..-5]
+  csv_new = CSV.open("#{new_title}_sanitized.csv","wb+")
 
-  CSV.open("new.csv","a+") do |c|
+  CSV.open("#{new_title}_sanitized.csv","a+") do |c|
     csv_new << csv.headers
+    i=0
     csv.each do |row|
-      cols.each {|col| row[col]='xxxxxxxxx'}
+      cols.each {|col| row[col]="xxxxxxxx#{i}"}
+      i+=1
     end
     csv.each {|r| csv_new << r }
   end
@@ -17,4 +54,4 @@ def scrub_csv(cols=[], csv_file)
 end
 
 
-test = scrub_csv(["policyID","county","hu_site_limit"], "FL_insurance_reduced.csv")
+test = scrub_csv(["email","first_name","last_name","login"], "spree_users.csv")
