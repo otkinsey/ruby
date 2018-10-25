@@ -7,21 +7,21 @@ def scrub_csv(cols=[], csv_files=[])
   # csv_new = CSV.open("new.csv","wb+")
 
   # create a hash of csv files associated with a letter
-  i=(1..(csv_files.length)).to_a
-  fh=Hash[i.zip csv_files]
-  fh.map {|k,v| fh[k]="#{v}" }
-  # puts i.length
+  indicies =(1..(csv_files.length)).to_a
+  files_hash=Hash[indicies.zip csv_files]
+  iterator = 0
 
   #create a csv object for each item in csv_files
-  fh.each do |k,v|
-    v=CSV.read(v, headers:true)
-    puts "line 18: #{v}"
+  files_hash.each do |k,v|
+    k = CSV.read("#{v}", headers:true)
     CSV.open("#{v}_sanitized","a+") do |c|
-      v << v.headers
-      csv.each do |row|
-        cols.each {|col| row[col]='xxxxxxxxx'}
+      c << k.headers
+      puts "iterator is #{iterator.to_s}"
+      k.each do |row|
+        cols[iterator].each {|col| row[col]='xxxxxxxxx'}
+        c << row
       end
-      csv.each {|r| csv_new << r }
+      iterator += 1
     end
   end
 
@@ -40,4 +40,4 @@ def scrub_csv(cols=[], csv_files=[])
 end
 
 
-test = scrub_csv(["policyID","county","hu_site_limit"], ["FL_insurance_reduced.csv"])
+test = scrub_csv([["firstname","lastname","address","city","zipcode","phone"],["sender","recipient","email"],["emails"]], ["spree_addresses.csv","spree_e_gifts.csv","spree_orders.csv"])
